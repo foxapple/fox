@@ -13,6 +13,7 @@ export FOX_COMMON=$FOX_ROOT/common
 export FOX_CONFIG=$FOX_ROOT/config
 export FOX_SCRIPTS=$FOX_ROOT/scripts
 export FOX_TEMPLATES=$FOX_ROOT/templates
+export FOX_CACHE=$FOX_ROOT/cache
 source $FOX_COMMON/logo.sh
 source $FOX_COMMON/utils.sh
 source $FOX_COMMON/dependency.sh
@@ -31,6 +32,7 @@ echo "[fox] start installing \`fox\`..."
 _TARGET="/usr/local/bin"
 _TARGET_FOX="${_TARGET}/${FOX_NAME}"
 ln -s $FOX_ROOT/fox.sh $_TARGET_FOX
+mkdir cache
 
 # initialize .foxrc
 echo "[fox] ========================================"
@@ -42,6 +44,7 @@ echo "export FOX_COMMON=\"$FOX_COMMON\"" >> .foxrc
 echo "export FOX_CONFIG=\"$FOX_CONFIG\"" >> .foxrc
 echo "export FOX_SCRIPTS=\"$FOX_SCRIPTS\"" >> .foxrc
 echo "export FOX_TEMPLATES=\"$FOX_TEMPLATES\"" >> .foxrc
+echo "export FOX_CACHE=\"$FOX_CACHE\"" >> .foxrc
 echo "fpath=($FOX_ROOT/fpath \$fpath)" >> .foxrc
 echo "autoload -U compinit" >> .foxrc
 echo "compinit" >> .foxrc
