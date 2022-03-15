@@ -16,7 +16,7 @@ function config_value_of() {
 
 function brewspec_value_of() {
     local configFile="$FOX_CONFIG/brewspec.yaml"
-    local version=`yq --version | cut -d ' ' -f3 | cut -d '.' -f1`
+    local version=`yq --version | tr ' ' '\n' | tail -n1 | cut -d '.' -f1`
     local value
     if [[ $version -ge 4 ]]; then
         value=`yq e ".$1" $configFile`
