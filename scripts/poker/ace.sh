@@ -9,8 +9,8 @@
 ##
 ##############################################################################
 
-source $NOX_COMMON/utils.sh
-source $NOX_COMMON/config.sh
+source $FOX_COMMON/utils.sh
+source $FOX_COMMON/config.sh
 
 # Usage of ace.sh
 function _usage_of_ace() {

@@ -1,5 +1,5 @@
-.noxrc
-_nox
+.foxrc
+_fox
 config.yaml
 .config-backup*.yaml
 _*/

@@ -9,8 +9,8 @@
 ##
 ##############################################################################
 
-source $NOX_ROOT/common/utils.sh
-source $NOX_ROOT/common/logo.sh
+source $FOX_ROOT/common/utils.sh
+source $FOX_ROOT/common/logo.sh
 
 # Usage of script-template.sh
 function _usage_of_build() {
@@ -29,7 +29,7 @@ Option:
 EOF
 }
 
-autocompleteFile="$NOX_ROOT/fpath/_nox"
+autocompleteFile="$FOX_ROOT/fpath/_fox"
 
 # 子目录
 function subdirs() {
@@ -57,14 +57,14 @@ function _subcmds_from_description() {
         local dirName=${subdirs[$index]}
         local descFile="${dirName}/.description"
         if [[ ! -f $descFile ]]; then
-            warning "[nox] the \`.description\` file in ${dirName} is nox exist."
-            warning "[nox] creating \`.description\` for ${dirName}..."
+            warning "[fox] the \`.description\` file in ${dirName} is fox exist."
+            warning "[fox] creating \`.description\` for ${dirName}..."
             echo "$dirName 相关功能" >> $descFile
         fi
         local descOfCmd=`cat $descFile | head -n 1`
         if [[ -z $descOfCmd ]]; then
-            warning "[nox] the first line of \`$descFile\` is empty."
-            warning "[nox] use default description for \`$descFile\`"
+            warning "[fox] the first line of \`$descFile\` is empty."
+            warning "[fox] use default description for \`$descFile\`"
             descOfCmd="$dirName 相关功能"
         fi
         echo "`space $spaceCount`\"${subdirs[$index]}:$descOfCmd\"" >> $autocompleteFile
@@ -94,7 +94,7 @@ function _options_from_usage_of() {
     local end=`ggrep "^EOF" -n $scriptName | head -n 1 | cut -d ":" -f1`
     local length=$[ $end - $start ]
     if [[ $length == 0 ]]; then
-        warning "[nox] `_usage_of_${prefixName}` in `${scriptName}` did not define any options."
+        warning "[fox] `_usage_of_${prefixName}` in `${scriptName}` did not define any options."
     fi
     local options=(`cat $scriptName | tail -n +$start | head -n $length | tr -d " " | tr -d '"' | tr "\n" " "`)
     local size=${#options[*]}
@@ -108,12 +108,12 @@ function _options_from_usage_of() {
             local opt2=`echo $opts | cut -d "|" -f2`
 
             if [[ ! -z $opt1 && ! -z $desc ]]; then
-                echo "[nox] building option \`${opt1}\` for subcommand \`${prefixName}\`; description: ${desc}"
+                echo "[fox] building option \`${opt1}\` for subcommand \`${prefixName}\`; description: ${desc}"
                 echo "`space $spaceBase`\"${opt1}:${desc}\"" >> $autocompleteFile
             fi
 
             if [[ ! -z $opt2 && ! -z $desc && $opt2 != $opt1 ]]; then
-                echo "[nox] building option \`${opt2}\` for subcommand \`${prefixName}\`; description: ${desc}"
+                echo "[fox] building option \`${opt2}\` for subcommand \`${prefixName}\`; description: ${desc}"
                 echo "`space $spaceBase`\"${opt2}:${desc}\"" >> $autocompleteFile
             fi
         fi
@@ -136,14 +136,14 @@ function _options_from_script() {
     spaceCount=$[ $spaceBase + 4 ]
     echo "`space $spaceCount`)" >> $autocompleteFile
 
-    echo "`space $spaceCount`_describe -t options \"nox `_cmds_from_path` $scriptName\" _options" >> $autocompleteFile
+    echo "`space $spaceCount`_describe -t options \"fox `_cmds_from_path` $scriptName\" _options" >> $autocompleteFile
 
     spaceCount=$spaceBase
     echo "`space $spaceCount`;;" >> $autocompleteFile
 }
 
 function _cmds_from_path() {
-    local cmds=`pwd | sed "s|^$NOX_SCRIPTS/||g" | sed "s|/| |g"`
+    local cmds=`pwd | sed "s|^$FOX_SCRIPTS/||g" | sed "s|/| |g"`
     echo "$cmds"
 }
 
@@ -165,7 +165,7 @@ function _dfs() {
     index=1
     while [[ $index -le $dirCount ]]; do
         local dirName=${subdirs[$index]}
-        echo "[nox] start building directory for subcommand \`$dirName\`..."
+        echo "[fox] start building directory for subcommand \`$dirName\`..."
         pushd `pwd`"/${dirName}" >& /dev/null
         spaceCount=$[ ($cmdLevel - 1) * 8 + 4 ]
 
@@ -174,7 +174,7 @@ function _dfs() {
         echo "`space $spaceCount`;;" >> $autocompleteFile
 
         popd >& /dev/null
-        success "[nox] subcommand \`${dirName}\` build success."
+        success "[fox] subcommand \`${dirName}\` build success."
         index=$[ index + 1 ]
     done
 
@@ -187,7 +187,7 @@ function _dfs() {
         spaceCount=$[ ($cmdLevel - 1) * 8 + 4 ]
         local scriptName=${subscripts[$index]}
         local prefixName=${scriptName%.*}
-        echo "[nox] start building script for subcommand \`${prefixName}\`..."
+        echo "[fox] start building script for subcommand \`${prefixName}\`..."
         echo "`space $spaceCount`${prefixName})" >> $autocompleteFile
 
         spaceCount=$[ $spaceCount + 4 ]
@@ -200,12 +200,12 @@ function _dfs() {
         spaceCount=$[ $spaceCount - 4 ]
         echo "`space $spaceCount`;;" >> $autocompleteFile
 
-        success "[nox] subcommand \`${prefixName}\` build success."
+        success "[fox] subcommand \`${prefixName}\` build success."
         index=$[ index + 1 ]
     done
 
     # subdirs 对应的子命令通配符处理
-    echo "[nox] start analyzing .description ..."
+    echo "[fox] start analyzing .description ..."
     spaceCount=$[ ($cmdLevel - 1) * 8 + 4 ]
     echo "`space $spaceCount`*)" >> $autocompleteFile
 
@@ -216,7 +216,7 @@ function _dfs() {
         _subcmds_from_description $spaceCount
         spaceCount=$[ $spaceCount - 4 ]
         echo "`space $spaceCount`)" >> $autocompleteFile
-        echo "`space $spaceCount`_describe -t commands \"nox $prevCmd subcommands\" _subcommands" >> $autocompleteFile
+        echo "`space $spaceCount`_describe -t commands \"fox $prevCmd subcommands\" _subcommands" >> $autocompleteFile
     fi
 
     echo "`space $spaceCount`_options=(" >> $autocompleteFile
@@ -227,13 +227,13 @@ function _dfs() {
     echo "`space $spaceCount`\"-x:调试模式\"" >> $autocompleteFile
     spaceCount=$[ $spaceCount - 4 ]
     echo "`space $spaceCount`)" >> $autocompleteFile
-    echo "`space $spaceCount`_describe -t options \"nox `_cmds_from_path` options\" _options" >> $autocompleteFile
+    echo "`space $spaceCount`_describe -t options \"fox `_cmds_from_path` options\" _options" >> $autocompleteFile
 
     spaceCount=$[ $spaceCount - 4 ]
     echo "`space $spaceCount`;;" >> $autocompleteFile
     spaceCount=$[ $spaceCount - 4 ]
     echo "`space $spaceCount`esac" >> $autocompleteFile
-    echo "[nox] analyzing .description finished!"
+    echo "[fox] analyzing .description finished!"
 }
 
 function build() {
@@ -278,17 +278,17 @@ function build() {
     fi
 
     # 入口
-    if [[ ! -d $NOX_ROOT/fpath ]]; then
-        echo "[nox] Creating directory: ${NOX_ROOT}/fpath"
-        mkdir $NOX_ROOT/fpath
+    if [[ ! -d $FOX_ROOT/fpath ]]; then
+        echo "[fox] Creating directory: ${FOX_ROOT}/fpath"
+        mkdir $FOX_ROOT/fpath
     fi
 
-    echo "#compdef nox" > $autocompleteFile
+    echo "#compdef fox" > $autocompleteFile
     echo "" >> $autocompleteFile
     echo "# ------------------------------------------------------------------------" >> $autocompleteFile
     echo "# " >> $autocompleteFile
-    echo "# FILE: _nox" >> $autocompleteFile
-    echo "# DESCRIPTION: Generated by \`nox system build\`. Do not modify this file !" >> $autocompleteFile
+    echo "# FILE: _fox" >> $autocompleteFile
+    echo "# DESCRIPTION: Generated by \`fox system build\`. Do not modify this file !" >> $autocompleteFile
     echo "# " >> $autocompleteFile
     echo "# ------------------------------------------------------------------------" >> $autocompleteFile
     echo "" >> $autocompleteFile
@@ -296,7 +296,7 @@ function build() {
     echo "local -a _options" >> $autocompleteFile
     echo "" >> $autocompleteFile
 
-    pushd $NOX_SCRIPTS >& /dev/null
+    pushd $FOX_SCRIPTS >& /dev/null
     local cmdLevel=1
     _dfs $cmdLevel
     popd >& /dev/null
@@ -306,7 +306,7 @@ function build() {
         print_logo
         success "                                                                   ... build success !"
         success ""
-        success "        Before you use nox! Please execute \"source ~/.zshrc\" to make sure that the nox configurations are ready!"
+        success "        Before you use fox! Please execute \"source ~/.zshrc\" to make sure that the fox configurations are ready!"
         success ""
     fi
 

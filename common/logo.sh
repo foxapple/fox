@@ -1,6 +1,6 @@
 #!/bin/sh
 
-source $NOX_ROOT/common/variables.sh
+source $FOX_ROOT/common/variables.sh
 
 function print_logo() {
   local color=${1:-$GREEN}

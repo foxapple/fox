@@ -1,11 +1,11 @@
 #!/bin/sh
 
-source $NOX_ROOT/common/utils.sh
+source $FOX_ROOT/common/utils.sh
 
-function _usage_of_nox() {
+function _usage_of_fox() {
     cat << EOF
 Usage:
-    nox subcmd1 [subcmd2] [-option] [value] ...
+    fox subcmd1 [subcmd2] [-option] [value] ...
 
 Description:
     使用 Tab 提示，选择对应的子命令，从而索引到指定的脚本。使用选项/参数为脚本提供运行参数。
@@ -18,7 +18,7 @@ EOF
 }
 
 function _search_and_execut_script() {
-    local path="$NOX_SCRIPTS"
+    local path="$FOX_SCRIPTS"
     while [[ ! -z $1 && ! $1 =~ ^- ]]; do
         path="$path/$1"
         shift 1
@@ -31,9 +31,9 @@ function _search_and_execut_script() {
     zsh $script $*
 }
 
-function nox() {
+function fox() {
     if [[ $# -eq 0 || $1 == "-h" || $1 == "--help" ]]; then
-        _usage_of_nox
+        _usage_of_fox
         exit 1
     fi
 
@@ -48,4 +48,4 @@ function nox() {
     fi
 }
 
-nox $*
+fox $*

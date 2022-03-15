@@ -9,7 +9,7 @@
 ##
 ##############################################################################
 
-source $NOX_ROOT/common/utils.sh
+source $FOX_ROOT/common/utils.sh
 
 # Usage of script-template.sh
 function _usage_of_mac_clean() {

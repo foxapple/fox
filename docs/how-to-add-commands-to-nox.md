@@ -1,6 +1,6 @@
-![](https://chuquan-public-r-001.oss-cn-shanghai.aliyuncs.com/nox/nox03.png)
+![](https://chuquan-public-r-001.oss-cn-shanghai.aliyuncs.com/fox/fox03.png)
 
-# 如何为 NOX 添加命令
+# 如何为 FOX 添加命令
 
 - [环境变量](#环境变量)
 - [创建子命令](#创建子命令)
@@ -12,62 +12,62 @@
 - [帮助提示](#帮助提示)
 - [小结](#小结)
 
-NOX 本质上是一个 Shell 脚本管理工具，它以系统命令调用的方式来执行指定的脚本，同时提供了自动补全功能，从而帮助用户快速索引脚本。
+FOX 本质上是一个 Shell 脚本管理工具，它以系统命令调用的方式来执行指定的脚本，同时提供了自动补全功能，从而帮助用户快速索引脚本。
 
-显然，Shell 脚本才是 NOX 最重要的组成部分。关于 NOX 的开发，其本质上就是如何以 NOX 的规范开发 Shell 脚本。
+显然，Shell 脚本才是 FOX 最重要的组成部分。关于 FOX 的开发，其本质上就是如何以 FOX 的规范开发 Shell 脚本。
 
 ## 环境变量
 
-在安装 NOX 之后，NOX 项目的根目录下会生成一个 `.noxrc` 文件，该文件内容导入了一系列的环境变量，便于开发者调用，如下所示：
-- `NOX_ROOT`：NOX 项目的根目录
-- `NOX_NAME`：NOX 系统命令名称
-- `NOX_COMMON`：通用工具脚本所存放目录
-- `NOX_CONFIG`：NOX 系统配置目录
-- `NOX_SCRIPTS`：NOX 管理的 Shell 脚本所存放的根目录
-- `NOX_TEMPLATES`：NOX 模板脚本及文件所存放的目录
+在安装 FOX 之后，FOX 项目的根目录下会生成一个 `.foxrc` 文件，该文件内容导入了一系列的环境变量，便于开发者调用，如下所示：
+- `FOX_ROOT`：FOX 项目的根目录
+- `FOX_NAME`：FOX 系统命令名称
+- `FOX_COMMON`：通用工具脚本所存放目录
+- `FOX_CONFIG`：FOX 系统配置目录
+- `FOX_SCRIPTS`：FOX 管理的 Shell 脚本所存放的根目录
+- `FOX_TEMPLATES`：FOX 模板脚本及文件所存放的目录
 
 ## 创建子命令
 
-NOX 管理的 Shell 脚本位于 `NOX_SCRIPTS` 目录下，我们可以在该目录下创建脚本或者创建子目录对脚本进行归类。为了让用户创建的子目录和脚本默认遵循 NOX 规范，NOX 通过 `nox system create` 命令，并分别提供了两个选项来帮助用户创建子目录和 Shell 脚本。
+FOX 管理的 Shell 脚本位于 `FOX_SCRIPTS` 目录下，我们可以在该目录下创建脚本或者创建子目录对脚本进行归类。为了让用户创建的子目录和脚本默认遵循 FOX 规范，FOX 通过 `fox system create` 命令，并分别提供了两个选项来帮助用户创建子目录和 Shell 脚本。
 
-**注意：该命令必须在 `NOX_SCRIPTS` 目录及其子目录下执行，否则将会执行失败**。
+**注意：该命令必须在 `FOX_SCRIPTS` 目录及其子目录下执行，否则将会执行失败**。
 
 ```shell
 # 创建一个名为 <dirname> 的子目录
-$ nox system create -d <dirname>
+$ fox system create -d <dirname>
 
 # 创建一个名为 <scriptname> 的 Shell 脚本
-$ nox system create -s <scriptname>
+$ fox system create -s <scriptname>
 ```
 
 ### 创建目录示例
-例如，我们希望创建一个名为 `poker` 的子目录，我们可以在 `NOX_SCRIPTS` 目录下执行如下命令：
+例如，我们希望创建一个名为 `poker` 的子目录，我们可以在 `FOX_SCRIPTS` 目录下执行如下命令：
 
 ```shell
-$ nox system create -d poker
+$ fox system create -d poker
 ```
 
-![](https://chuquan-public-r-001.oss-cn-shanghai.aliyuncs.com/nox/nox-system-create-poker.gif)
+![](https://chuquan-public-r-001.oss-cn-shanghai.aliyuncs.com/fox/fox-system-create-poker.gif)
 
-进入新创建的 `poker` 目录，我们会发现该目录下默认生成一个 `.description` 隐藏文件，该文件描述了 `poker` 这个子目录分类下的脚本的主要功能。NOX 自动补全系统会读取 `.description` 中的描述信息。
+进入新创建的 `poker` 目录，我们会发现该目录下默认生成一个 `.description` 隐藏文件，该文件描述了 `poker` 这个子目录分类下的脚本的主要功能。FOX 自动补全系统会读取 `.description` 中的描述信息。
 
 ### 创建脚本示例
 在上述例子的基础上，我们进入 `poker` 子目录，创建一个 `ace.sh` 脚本，我们可以执行如下命令（**注：命令中无需添加 `.sh` 后缀**）：
 
 ```shell
-$ nox system create -s ace
+$ fox system create -s ace
 ```
 
-![](https://chuquan-public-r-001.oss-cn-shanghai.aliyuncs.com/nox/nox-system-create-ace.gif)
+![](https://chuquan-public-r-001.oss-cn-shanghai.aliyuncs.com/fox/fox-system-create-ace.gif)
 
 
-此时 NOX 在 `poker` 子目录下创建了一个名为 `ace.sh` 的脚本。这个脚本是一个模板脚本，可以直接执行。**注意：由于此时还没有对 NOX 进行编译，此时新建的子目录和脚本都尚未支持自动补全**。我们需要手动输入完整的调用命令来执行 `ace.sh` 脚本，如下所示：
+此时 FOX 在 `poker` 子目录下创建了一个名为 `ace.sh` 的脚本。这个脚本是一个模板脚本，可以直接执行。**注意：由于此时还没有对 FOX 进行编译，此时新建的子目录和脚本都尚未支持自动补全**。我们需要手动输入完整的调用命令来执行 `ace.sh` 脚本，如下所示：
 
 ```shell
-$ nox poker ace
+$ fox poker ace
 ```
 
-![](https://chuquan-public-r-001.oss-cn-shanghai.aliyuncs.com/nox/nox-poker-ace-01.gif)
+![](https://chuquan-public-r-001.oss-cn-shanghai.aliyuncs.com/fox/fox-poker-ace-01.gif)
 
 ### 编写脚本示例
 接下来，我们对 `ace.sh` 脚本进行改写，使其执行能够打印 `A, 2, 3, 4, 5, 6, 7, 9, 10, J, Q, K, Joker`。同时支持两个选项：
@@ -94,8 +94,8 @@ $ nox poker ace
 ##
 ##############################################################################
 
-source $NOX_COMMON/utils.sh
-source $NOX_COMMON/config.sh
+source $FOX_COMMON/utils.sh
+source $FOX_COMMON/config.sh
 
 # Usage of ace.sh
 function _usage_of_ace() {
@@ -204,57 +204,57 @@ function ace() {
 ace $*
 ```
 
-然后，我们就可以执行 `nox poker ace` 并加上相关的选项来执行脚本。
+然后，我们就可以执行 `fox poker ace` 并加上相关的选项来执行脚本。
 
 ```shell
 # 顺序打印扑克牌一遍
-$ nox poker ace
+$ fox poker ace
 
 # 顺序打印扑克牌两遍
-$ nox poker ace -c 2
+$ fox poker ace -c 2
 
 # 逆序打印扑克牌两遍
-$ nox poker ace -c 2 -r
+$ fox poker ace -c 2 -r
 ```
 
-![](https://chuquan-public-r-001.oss-cn-shanghai.aliyuncs.com/nox/nox-poker-ace-02.gif)
+![](https://chuquan-public-r-001.oss-cn-shanghai.aliyuncs.com/fox/fox-poker-ace-02.gif)
 
 ## 编译
 
-在创建了子目录、脚本之后，虽然可以通过系统命令的方式调用脚本，如上述例子中，可以通过 `nox poker ace` 来调用脚本，但是却没有自动补全功能。NOX 提供的 `nox system build` 命令就是用于编译生成自动补全文件，编译后会生成一个 `_nox` 文件，存放在 `NOX_ROOT/fpath` 目录下。编译命令执行完成之后，需要通过执行 `source ~/.zshrc` 命令来使之生效，或者重启终端生效。
+在创建了子目录、脚本之后，虽然可以通过系统命令的方式调用脚本，如上述例子中，可以通过 `fox poker ace` 来调用脚本，但是却没有自动补全功能。FOX 提供的 `fox system build` 命令就是用于编译生成自动补全文件，编译后会生成一个 `_fox` 文件，存放在 `FOX_ROOT/fpath` 目录下。编译命令执行完成之后，需要通过执行 `source ~/.zshrc` 命令来使之生效，或者重启终端生效。
 
 ```shell
-$ nox system build
+$ fox system build
 
 $ source ~/.zshrc
 ```
 
 执行结果如下所示：
 
-![](https://chuquan-public-r-001.oss-cn-shanghai.aliyuncs.com/nox/nox-system-build-poker-ace.gif)
+![](https://chuquan-public-r-001.oss-cn-shanghai.aliyuncs.com/fox/fox-system-build-poker-ace.gif)
 
 ## 调试模式
 
-通过 `nox system create` 创建的脚本，默认都支持一个 `--debug` 和 `-x` 选项，可以将脚本的执行切换成为调试模式。调试模式能够打印出脚本所执行的每一行代码及其结果，便于开发者进行开发调试。
+通过 `fox system create` 创建的脚本，默认都支持一个 `--debug` 和 `-x` 选项，可以将脚本的执行切换成为调试模式。调试模式能够打印出脚本所执行的每一行代码及其结果，便于开发者进行开发调试。
 
-以 `nox poker ace` 为例，可以采用如下方式使用调试模式执行脚本。
+以 `fox poker ace` 为例，可以采用如下方式使用调试模式执行脚本。
 
-![](https://chuquan-public-r-001.oss-cn-shanghai.aliyuncs.com/nox/nox-poker-ace-debug.gif)
+![](https://chuquan-public-r-001.oss-cn-shanghai.aliyuncs.com/fox/fox-poker-ace-debug.gif)
 
 ## 帮助提示
 
-通过 `nox system create` 创建的脚本，默认都支持一个 `--help` 和 `-h` 选项，可以打印出该脚本使用说明。每个脚本内部都有一个名为 `_usage_of_脚本名` 的方法，该方法内部定义了该脚本的使用说明。
+通过 `fox system create` 创建的脚本，默认都支持一个 `--help` 和 `-h` 选项，可以打印出该脚本使用说明。每个脚本内部都有一个名为 `_usage_of_脚本名` 的方法，该方法内部定义了该脚本的使用说明。
 
-以 `nox poker ace` 为例，可以采用如下方式查看脚本的使用方法。
+以 `fox poker ace` 为例，可以采用如下方式查看脚本的使用方法。
 
-![](https://chuquan-public-r-001.oss-cn-shanghai.aliyuncs.com/nox/nox-poker-ace-help.gif)
+![](https://chuquan-public-r-001.oss-cn-shanghai.aliyuncs.com/fox/fox-poker-ace-help.gif)
 
 
 ## 小结
 
-NOX 的开发非常简单，本质上就涉及到两条命令：
-- `nox system create`：创建子目录或脚本。
-- `nox system build`：编译自动补全。
+FOX 的开发非常简单，本质上就涉及到两条命令：
+- `fox system create`：创建子目录或脚本。
+- `fox system build`：编译自动补全。
 
 注意，自动补全编译完成之后，要执行 `source ~/.zshrc` 后才会生效。
 

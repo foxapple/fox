@@ -9,8 +9,8 @@
 ##
 ##############################################################################
 
-source $NOX_COMMON/utils.sh
-source $NOX_COMMON/config.sh
+source $FOX_COMMON/utils.sh
+source $FOX_COMMON/config.sh
 
 # Usage of king.sh
 function _usage_of_king() {
@@ -80,7 +80,7 @@ function king() {
     fi
 
     # start
-    success "Demo Command: nox poker king"
+    success "Demo Command: fox poker king"
     warning "KING!!!"
 
     if [[ $debug == 1 ]]; then

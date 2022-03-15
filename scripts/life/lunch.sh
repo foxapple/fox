@@ -9,7 +9,7 @@
 ##
 ##############################################################################
 
-source $NOX_COMMON/utils.sh
+source $FOX_COMMON/utils.sh
 
 # Usage of launch.sh
 function _usage_of_lunch() {
@@ -77,10 +77,10 @@ function lunch() {
         set -x
     fi
 
-    local configFile="$NOX_CONFIG/config.yaml"
+    local configFile="$FOX_CONFIG/config.yaml"
     local count=`yq r $configFile --length restaurants`
     if [[ -z $count || $count -lt 1 ]]; then
-        error "The value of key \`restaurants\` $NOX_CONFIG/config.yaml is not defined. Please initialize it as a array. See example in \`$NOX_TEMPLATES/config-template.yaml.\`"
+        error "The value of key \`restaurants\` $FOX_CONFIG/config.yaml is not defined. Please initialize it as a array. See example in \`$FOX_TEMPLATES/config-template.yaml.\`"
         exit 1
     fi
 

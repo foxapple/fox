@@ -9,8 +9,8 @@
 ##
 ##############################################################################
 
-source $NOX_ROOT/common/utils.sh
-source $NOX_ROOT/common/logo.sh
+source $FOX_ROOT/common/utils.sh
+source $FOX_ROOT/common/logo.sh
 
 # Usage of update.sh
 function _usage_of_update() {
@@ -19,7 +19,7 @@ Usage:
     update
 
 Description:
-    更新 nox 最新功能
+    更新 fox 最新功能
 
 Option:
     --help|-h:                                          -- 使用帮助
@@ -80,30 +80,30 @@ function update() {
     fi
 
     # start
-    pushd $NOX_ROOT >& /dev/null
-    echo "[nox] ========================================"
-    echo "[nox] start updating features..."
+    pushd $FOX_ROOT >& /dev/null
+    echo "[fox] ========================================"
+    echo "[fox] start updating features..."
     git pull --rebase >& /dev/null
     if [[ $? != 0 ]]; then
-        warning "[nox] cannot pull with rebase: You have unstaged changes."
-        warning "[nox] please commit or stash them."
-        echo "[nox] skip updating features..."
+        warning "[fox] cannot pull with rebase: You have unstaged changes."
+        warning "[fox] please commit or stash them."
+        echo "[fox] skip updating features..."
     fi
-    source $NOX_COMMON/dependency.sh
-    echo "[nox] ========================================"
-    echo "[nox] start updating dependencies..."
+    source $FOX_COMMON/dependency.sh
+    echo "[fox] ========================================"
+    echo "[fox] start updating dependencies..."
     export HOMEBREW_NO_AUTO_UPDATE=1
-    register_nox_dependency
+    register_fox_dependency
 
-    echo "[nox] ========================================"
-    echo "[nox] start building completions..."
-    nox system build -s
+    echo "[fox] ========================================"
+    echo "[fox] start building completions..."
+    fox system build -s
 
     success ""
     print_logo
     success "                                                                   ... update finished !"
     success ""
-    success "        Before you use nox! Please execute \"source ~/.zshrc\" to make sure that the nox configurations are ready!"
+    success "        Before you use fox! Please execute \"source ~/.zshrc\" to make sure that the fox configurations are ready!"
     success ""
     popd >& /dev/null
 

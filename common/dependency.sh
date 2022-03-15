@@ -1,23 +1,23 @@
 #!/bin/sh
 
-source $NOX_ROOT/common/utils.sh
-source $NOX_ROOT/common/config.sh
+source $FOX_ROOT/common/utils.sh
+source $FOX_ROOT/common/config.sh
 
 function check_dependency() {
     local target=$1
-    echo "[nox] checking $target..."
+    echo "[fox] checking $target..."
     brew list $target >& /dev/null
 }
 
 function install_dependency() {
     local target=$1
-    echo "[nox] installing $target..."
+    echo "[fox] installing $target..."
     brew install $target > /dev/null
 }
 
-# 安装 NOX 所需的依赖
-function register_nox_dependency() {
-    echo "[nox] start installing system dependencies..."
+# 安装 FOX 所需的依赖
+function register_fox_dependency() {
+    echo "[fox] start installing system dependencies..."
     # Installing gnu-getopt
     local GGETOPT="/usr/local/bin/ggetopt"
     if [[ ! -x $GGETOPT ]]; then
@@ -34,12 +34,12 @@ function register_nox_dependency() {
     (check_dependency yq) || (install_dependency yq)
 
     # Read brewspec.yaml to install custom dependencies
-    local brewspecFile="$NOX_CONFIG/brewspec.yaml"
+    local brewspecFile="$FOX_CONFIG/brewspec.yaml"
     local count=`brewspec_value_of dependencies | wc -l | tr -d ' '`
     if [[ -z $count || $count -lt 1 ]]; then
-        echo "[nox] \`$NOX_CONFIG/brewspec.yaml\` did not define any brew dependency."
+        echo "[fox] \`$FOX_CONFIG/brewspec.yaml\` did not define any brew dependency."
     else
-        echo "[nox] start installing brew dependencies..."
+        echo "[fox] start installing brew dependencies..."
         local items=(`brewspec_value_of dependencies | sed "s/^- //" | tr "\n" " "`)
         for item in $items; do
             (check_dependency $item) || (install_dependency $item)
@@ -47,7 +47,7 @@ function register_nox_dependency() {
     fi
 }
 
-function unregister_nox_dependency() {
+function unregister_fox_dependency() {
     local GGETOPT="/usr/local/bin/ggetopt"
     if [[ -x $GGETOPT ]]; then
         rm $GGETOPT

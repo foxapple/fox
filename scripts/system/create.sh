@@ -9,8 +9,8 @@
 ##
 ##############################################################################
 
-source $NOX_ROOT/common/utils.sh
-source $NOX_ROOT/common/config.sh
+source $FOX_ROOT/common/utils.sh
+source $FOX_ROOT/common/config.sh
 
 # Usage of script-template.sh
 function _usage_of_create() {
@@ -20,7 +20,7 @@ Usage:
     create --script <scriptname>
 
 Description:
-    用于 nox 脚本开发，创建一个子目录或脚本
+    用于 fox 脚本开发，创建一个子目录或脚本
 
 Option:
     --help|-h:                                          -- 使用帮助
@@ -94,8 +94,8 @@ function create() {
     fi
 
     local currentPath=`pwd`
-    if [[ ! $currentPath =~ $NOX_SCRIPTS ]]; then
-        error "Current path is under under $NOX_SCRIPTS"
+    if [[ ! $currentPath =~ $FOX_SCRIPTS ]]; then
+        error "Current path is under under $FOX_SCRIPTS"
         exit 1
     fi
 
@@ -118,7 +118,7 @@ function create() {
 
         mkdir $dirName
         pushd "`pwd`/$dirName"
-        cp $NOX_ROOT/templates/description-template .description
+        cp $FOX_ROOT/templates/description-template .description
         echo "$dirName 相关功能" >> .description
         popd
     fi
@@ -136,7 +136,7 @@ function create() {
         fi
 
         local underline=`echo $scriptName | sed "s/-/_/g"`
-        cp $NOX_ROOT/templates/script-template.sh ${scriptName}.sh
+        cp $FOX_ROOT/templates/script-template.sh ${scriptName}.sh
         gsed -i "s/script-template/${scriptName}/g" ${scriptName}.sh
         gsed -i "s/script_template/${underline}/g" ${scriptName}.sh
         gsed -i "s/<ldap>/${ldap}/g" ${scriptName}.sh

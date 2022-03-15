@@ -1,6 +1,6 @@
 #!/bin/sh
 
-source $NOX_COMMON/variables.sh
+source $FOX_COMMON/variables.sh
 
 # Judge whether a command exists or not
 function command_exists() {
