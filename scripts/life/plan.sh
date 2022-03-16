@@ -12,11 +12,15 @@
 source $FOX_COMMON/utils.sh
 source $FOX_COMMON/config.sh
 
+
 # Usage of plan.sh
 function _usage_of_plan() {
     cat << EOF
 Usage:
-    plan --a-long --b-long argB --c-long argC
+    plan -a <计划内容>
+    plan -t
+    plan -f <计划序号>
+    plan -r <计划序号>
 
 Description:
     plan 相关功能
@@ -24,9 +28,10 @@ Description:
 Option:
     --help|-h:                                          -- 使用帮助
     --debug|-x:                                         -- 调试模式
-    --a-long|-a:                                        -- 布尔类型选项
-    --b-long|-b:                                        -- 带一个参数
-    --c-long|-c:                                        -- 带一个可选参数
+    --add|-a:                                           -- 添加计划, 参数为今天计划内容
+    --today|-t:                                         -- 查看今日计划
+    --finish|-f:                                        -- 完成计划, 参数为今天计划序号
+    --remove|-r:                                        -- 移除计划, 参数为今天计划序号
 
 EOF
 }
@@ -48,8 +53,12 @@ EOF
 
 function plan() {
     local debug=0
+    local show_plan=0
+    local today=$(date -v-0d +"%y-%m-%d")
+    local file=$FOX_CACHE/$today.csv
+    [ ! -f "$file" ] && touch $file
 
-    local ARGS=`ggetopt -o hxab:c:: --long help,debug,a-long,b-long:,c-long:: -n 'Error' -- "$@"`
+    local ARGS=`ggetopt -o h,x,a:tf:r: --long help,debug,add:,today:,finish:,remove: -n 'Error' -- "$@"`
     if [ $? != 0 ]; then
         error "Invalid option..." >&2;
         exit 1;
@@ -67,26 +76,40 @@ function plan() {
                 debug=1
                 shift
                 ;;
-            -a|--a-long)
-                echo "Option a"
-                shift
-                ;;
-            -b|--b-long)
-                echo "Option b, argument $2'"
+            -a|--add)
+                echo "add plan $2"
+                (cat $file ; echo $2) > $file.bak
+                cat $file.bak > $file
                 shift 2
                 ;;
-            -c|--c-long)
-                # c has an optional argument. As we are in quoted mode, an empty parameter will be generated if its optional argument is not found.
-                case "$2" in
-                    "")
-                        echo "Option c, no argument"
-                        shift 2
-                        ;;
-                    *)
-                        echo "Option c, argument $2'"
-                        shift 2
-                        ;;
-                esac
+            -t|--today)
+                show_plan=1
+                shift
+                ;;
+            -f|--finish)
+                echo "finish plan index: $2"
+                local get_order=NR==$2
+                local data=$(awk $get_order $file)
+                if [[ $data =~ "(DONE)" ]]
+                then
+                    echo "plan has finish!"
+                else
+                    local data_done="$data(DONE)"
+                    local order=NR!=$2
+                    (awk $order $file) > $file.bak
+                    cat $file.bak > $file
+                    # append finish plan
+                    (cat $file ; echo $data_done) > $file.bak
+                    cat $file.bak > $file
+                fi
+                shift 2
+                ;;
+            -r|--remove)
+                echo "remove plan $2"
+                local order=NR!=$2
+                (awk $order $file) > $file.bak
+                cat $file.bak > $file
+                shift 2
                 ;;
             --)
                 shift
@@ -103,11 +126,14 @@ function plan() {
         set -x
     fi
 
-    # start
-    echo "plan start ..."
-
     if [[ $debug == 1 ]]; then
         set +x
+    fi
+
+
+    if [[ $show_plan == 1 ]]; then
+        echo "today plan:"
+        awk '{str=NR" "$1;if(match($1, "(DONE)")==0)print "\033[1;31m"str" \033[0m"; else print "\033[1;32m"str" \033[0m" }' $file
     fi
 }
 
